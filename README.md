@@ -172,8 +172,8 @@ Summary: we develop something and we test it before we release it.
 
 STEPS:
 
-1. Clone the repository: `git clone https://github.com/name/repository.git`
-2. Delete .git `rm -rf .git`
+1. Clone the repository: `git clone https://github.com/name/repository.git` - ([link](https://github.com/alfonso-torres/eng84_CI_CD_Jenkins)).
+2. Delete .git `rm -rf .git`.
 3. And create your own repository where you will push this code.
 4. Open a terminal and go to ssh folder: `cd ~/.ssh/`
 5. Create a new key: `ssh-keygen -t ed25519 -C "your_email@hotmail.com"` (Command for Ubuntu). Tag with a relevant name.

@@ -197,12 +197,15 @@ STEPS:
 23. In `Build Triggers`, tick on `GitHub hook trigger for GITScm polling`.
 24. In `Build Environment`, tick on `Provide Node & npm bin/ folder to PATH`. Leave that at it is.
 25. In `Build`, select the option `Execute shell` and add the following commands: 
+
 ````
 cd app
 npm install
 npm test
 ````
+
 Jenkins is going to clone the repository and go to app folder and run the commands. It will automate the tests.
+
 26. Click on `Apply` and then `Save`.
 27. Let's go and click on `Build now`. When it has finished, check if it passed all the tests and the app is running. It did everything for us. Jenkins go to github and clone the repository using the key.
 28. Let's go back to the repository in github. Click on `Settings`.

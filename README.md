@@ -208,9 +208,9 @@ The Jenkins master acts to schedule the jobs and assign agent node and send buil
 
 It will also monitor the agent node state (offline or online) and getting back the build result responses from agent and the display build results on the console output. The workload of building jobs is delegated to multiple agent nodes.
 
-STEPS:
+_STEPS:_
 
-1. Clone the repository: `git clone https://github.com/name/repository.git` - ([link](https://github.com/alfonso-torres/eng84_CI_CD_Jenkins)).
+1. Clone the repository: `git clone https://github.com/name/repository.git` in your local machine in any folder - ([link](https://github.com/alfonso-torres/eng84_CI_CD_Jenkins)).
 2. Delete .git `rm -rf .git`.
 3. And create your own repository where you will push this code.
 4. Open a terminal and go to ssh folder: `cd ~/.ssh/`
@@ -270,9 +270,9 @@ Make a change to the homepage of the app and push your code to the develop branc
 
 - __Tasks:__
 
-- Job to automatically build and test app on new commit to dev branch (The same steps like we did before but change the main branch for dev branch).
-- Job to merge dev to main branches.
-- Job to deploy on AWS EC2 once the code is merged to main.
+1. Job to automatically build and test app on new commit to dev branch (The same steps like we did before but change the main branch for dev branch).
+2. Job to merge dev to main branches.
+3. Job to deploy on AWS EC2 once the code is merged to main.
 
 - __Notes & tips:__
 
@@ -308,9 +308,9 @@ EOF
 
 - __Acceptance Criteria:__
 
-- Is it's own job on Jenkins.
-- Trigger is set to successful merge and publish of code.
-- Automatically transfer files into live server on EC2.
+1. Is it's own job on Jenkins.
+2. Trigger is set to successful merge and publish of code.
+3. Automatically transfer files into live server on EC2.
 
 - __Solution:__
 
@@ -334,8 +334,8 @@ To be able to create this pipeline, we have to create 3 Jenkins `Freestyle Proje
 12. In `Branch Specifier` change to `*/dev`.
 13. In `Build Environment`, tick on `Provide Node & npm bin/ folder to PATH`. Leave that at it is.
 14. In `Post-build Actions`, select `Git Publisher`.
-15. Tick on `Push onlu if build suceeds`.
-16. In `Branches` section, in the `branch to push` write down `main`, and in `target remote name` write down `origin`. It is ogin to merge to the main branch.
+15. Tick on `Push only if build suceeds`.
+16. In `Branches` section, in the `branch to push` write down `main`, and in `target remote name` write down `origin`. It is going to merge to the main branch.
 17. Click on `Apply` and `Save`.
 18. Go back to the last project `jose_CI_test`. In the section `Post-build Actions`, select `Build other projects`.
 19. In the gap `project to build`, select your new project `jose_merge` and tick on `trigger only if build is stable`.
@@ -343,7 +343,7 @@ To be able to create this pipeline, we have to create 3 Jenkins `Freestyle Proje
 21. Open a terminal, go to your folder of the repository in your local machine. Create a new branch `git branch dev`. Swap to the branch `git checkout dev`, modify some files, for example README file and push it from the dev branch like always.
 22. Go back to the Jenkins dashboard and check that both jobs, firstly `jose_CI_test`, and then `jose_merge` have finished successfully. And finally go to the your github repository of the project and check te commits. You will see that the new updates was merged to the main branch.
 
-Second task done. Successful merge.
+Second task done. Successful merged.
 
 - Finally, if the second job succeeds, the third is triggered, wheren a `ssh` connection is established with the EC2 instance where the application is hosted. When the connection is established within the new job of jenkins, the necessary commands are executed to copy the newly edited files to the instance in order to deploy the app. We will restart the nodejs application to have the app available for the clients. Let's go on with the steps:
 
@@ -358,22 +358,21 @@ Second task done. Successful merge.
 9. Open a terminal and go to ssh folder: `cd ~/.ssh/`. Now we need copy our private key.
 10. Come back to jenkins and paste it the section of `Private key`. Add a username to identify later your key. Click on `Add`.
 11. So, in `Credentials` select the key that we have added. It should resolve any problem.
-12. In `Branch Specifier` change to `*/main` for the reason we have merged the project to main branch in the last step.
+12. In `Branch Specifier` change to `*/main` for the reason we have merged the project to main branch in the last step, so we want to use the main branch because it should be up to date with the latest changes.
 13. In `Build Environment`, tick on `Provide Node & npm bin/ folder to PATH`. Leave that at it is.
 14. In `Build Environment`, also tick on `SSH Agent`.
 15. In credentials, we need to add the key regarding AWS, to be able to establish the connection with ssh from jenkins to AWS. Click on `Add` and do the same steps like we did before but with the new key. After adding, select the key in the gap.
 16. In `Build`, select the option `Execute shell`. We are going to execute the commands in order to synchronize the code, which has been previously unified, to the instance where we are going to launch the application. We will connect remotely and then we will launch the application. Adding this commands to run in the section `Command`:
 
 ````bash
-rm -rf eng84_CI_CD_Jenkins*
-git clone -b main https://github.com/name/repository.git
-cd eng84_CI_CD_Jenkins
 rsync -avz -e "ssh -o StrictHostKeyChecking=no" app ubuntu@public_ip_app:/home/ubuntu/app
 #rsync -avz -e "ssh -o StrictHostKeyChecking=no" environment ubuntu@52.50.22.47:/home/ubuntu/app
 
 ssh -A -o "StrictHostKeyChecking=no" ubuntu@public_ip_app <<EOF
 
     killall npm
+
+    #sudo bash ./environment/provision.sh
 
     cd app/app
     sudo npm install
